@@ -94,6 +94,7 @@ Item {
         if(value !== old_val) {
             /* emit */ update(name, args)
         } else {
+            sensorModel.emitValueChanged()
             print("    same value")
         }
     }
