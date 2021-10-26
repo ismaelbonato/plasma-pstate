@@ -4,22 +4,6 @@ INTEL_PSTATE=/sys/devices/system/cpu/intel_pstate
 CPU_MIN_PERF=$INTEL_PSTATE/min_perf_pct
 CPU_MAX_PERF=$INTEL_PSTATE/max_perf_pct
 
-AMD_CPB=/sys/devices/system/cpu/cpufreq/policy0/cpb
-CPU_BOOST=/sys/devices/system/cpu/cpufreq/boost
-
-if [ -f $CPU_BOOST ]; then
-    CPU_TURBO=$CPU_BOOST
-    CPU_TURBO_ON="1"
-    CPU_TURBO_OFF="0"
-elif [ -f $INTEL_PSTATE/no_turbo ]; then
-    CPU_TURBO=$INTEL_PSTATE/no_turbo
-    CPU_TURBO_ON="0"
-    CPU_TURBO_OFF="1"
-elif [ -f $AMD_CPB ]; then
-    CPU_TURBO=$AMD_CPB
-    CPU_TURBO_ON="1"
-    CPU_TURBO_OFF="0"
-fi
 
 GPU=$(grep -H 0x8086 /sys/class/drm/card?/device/vendor 2>/dev/null | \
       head -n1 | sed 's/\/device\/vendor:.*//')
@@ -87,41 +71,6 @@ set_cpu_max_perf () {
     read_cpu_max_perf
     json="{"
     json="${json}\"cpu_max_perf\":\"${cpu_max_perf}\""
-    json="${json}}"
-    echo "$json"
-}
-
-check_cpu_turbo () {
-    [ -n "$CPU_TURBO" ] && [ -f $CPU_TURBO ]
-}
-
-read_cpu_turbo () {
-    cpu_turbo=$(cat $CPU_TURBO)
-    if [ "$cpu_turbo" = "$CPU_TURBO_OFF" ]; then
-        cpu_turbo="false"
-    else
-        cpu_turbo="true"
-    fi
-}
-
-append_cpu_turbo() {
-    check_cpu_turbo || return 1
-    read_cpu_turbo
-    append_json "\"cpu_turbo\":\"${cpu_turbo}\""
-}
-
-set_cpu_turbo () {
-    turbo=$1
-    if [ -n "$turbo" ]; then
-        if [ "$turbo" = "true" ]; then
-            printf "%s" "$CPU_TURBO_ON\n" > $CPU_TURBO 2> /dev/null
-        else
-            printf "%s" "$CPU_TURBO_OFF\n" > $CPU_TURBO 2> /dev/null
-        fi
-    fi
-    read_cpu_turbo
-    json="{"
-    json="${json}\"cpu_turbo\":\"${cpu_turbo}\""
     json="${json}}"
     echo "$json"
 }
