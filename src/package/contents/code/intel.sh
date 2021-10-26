@@ -4,10 +4,21 @@ INTEL_PSTATE=/sys/devices/system/cpu/intel_pstate
 CPU_MIN_PERF=$INTEL_PSTATE/min_perf_pct
 CPU_MAX_PERF=$INTEL_PSTATE/max_perf_pct
 
-if [ -f $INTEL_PSTATE/no_turbo ]; then
+AMD_CPB=/sys/devices/system/cpu/cpufreq/policy0/cpb
+CPU_BOOST=/sys/devices/system/cpu/cpufreq/boost
+
+if [ -f $CPU_BOOST ]; then
+    CPU_TURBO=$CPU_BOOST
+    CPU_TURBO_ON="1"
+    CPU_TURBO_OFF="0"
+elif [ -f $INTEL_PSTATE/no_turbo ]; then
     CPU_TURBO=$INTEL_PSTATE/no_turbo
     CPU_TURBO_ON="0"
     CPU_TURBO_OFF="1"
+elif [ -f $AMD_CPB ]; then
+    CPU_TURBO=$AMD_CPB
+    CPU_TURBO_ON="1"
+    CPU_TURBO_OFF="0"
 fi
 
 GPU=$(grep -H 0x8086 /sys/class/drm/card?/device/vendor 2>/dev/null | \
