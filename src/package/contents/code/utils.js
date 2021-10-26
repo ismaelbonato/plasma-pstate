@@ -119,6 +119,12 @@ var model =  [
             {'type': 'group', 'text': 'CPU Frequencies', 'items' :[
                 {'type': 'slider', 'text': 'Min perf', 'min': 0, 'max': 100, 'sensor': 'cpu_min_perf'},
                 {'type': 'slider', 'text': 'Max perf', 'min': 0, 'max': 100, 'sensor': 'cpu_max_perf'},
+                {'type': 'combobox', 'text': 'Min freq', 'sensor': 'cpufreq_scaling_min_freq',
+                    'items' : undefined, 'available_values': 'cpu_scaling_available_frequencies'
+                },
+                {'type': 'combobox', 'text': 'Max freq', 'sensor': 'cpufreq_scaling_max_freq',
+                    'items' : undefined, 'available_values': 'cpu_scaling_available_frequencies'
+                },
                 {'type': 'switch', 'text': 'Turbo', 'sensor': 'cpu_turbo'}
             ]},
             {'type': 'group', 'text': 'GPU Frequencies', 'visible': 'showIntelGPU', 'items' :[
@@ -134,14 +140,6 @@ var model =  [
                 {'symbol': 'k', 'text': "Schedutil", 'sensor_value': 'schedutil'},
                 {'symbol': 'f', 'text': "Conservative", 'sensor_value': 'conservative'}
             ]},
-            {'type': 'group', 'text': 'CPU Frequencies', 'items' :[
-                {'type': 'combobox', 'text': 'Min freq', 'sensor': 'cpufreq_scaling_min_freq',
-                    'items' : undefined, 'available_values': 'cpu_scaling_available_frequencies'
-                },
-                {'type': 'combobox', 'text': 'Max freq', 'sensor': 'cpufreq_scaling_max_freq',
-                    'items' : undefined, 'available_values': 'cpu_scaling_available_frequencies'
-                },
-            ]}
 
         ]
     },
