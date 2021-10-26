@@ -8,7 +8,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 
 import "./" as Pstate
-
+import '../code/utils.js' as Utils
 
 ColumnLayout {
     id: group
@@ -52,23 +52,33 @@ ColumnLayout {
         }
     }
 
+    function createItem(sensorItem) {
+        switch (sensorItem['type']) {
+            case 'slider': {
+                slider.createObject(group, {'props': sensorItem})
+                break
+            }
+            case 'switch': {
+                switchbutton.createObject(group, {'props': sensorItem})
+                break
+            }
+            case 'combobox': {
+                combobox.createObject(group, {'props': sensorItem})
+                break
+            }
+            default: console.log("header: unkonwn type: " + sensorItem['type'])
+        }
+    }
+
     onItemsChanged: {
         for(var i = 0; i < items.length; i++) {
-            switch (items[i]['type']) {
-                case 'slider': {
-                    slider.createObject(group, {'props': items[i]})
-                    break
-                }
-                case 'switch': {
-                    switchbutton.createObject(group, {'props': items[i]})
-                    break
-                }
-                case 'combobox': {
-                    combobox.createObject(group, {'props': items[i]})
-                    break
-                }
-                default: console.log("header: unkonwn type: " + items[i]['type'])
+            var sensorItem = items[i]
+
+            if(!Utils.sensor_has_value(sensorItem)) {
+                continue
             }
+
+            createItem(sensorItem)
         }
     }
 
