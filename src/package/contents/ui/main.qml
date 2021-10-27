@@ -43,7 +43,14 @@ Item {
 
     property bool editMode: false
 
-    property bool hasNativeBackend: plasmoid.nativeInterface.isReady !== undefined
+
+    readonly property var datasourceBackend: 0
+    readonly property var mockBackend: 1
+    readonly property var nativeBackend: 2
+
+    property int backendType: plasmoid.nativeInterface.isReady !== undefined ?
+                                nativeBackend : datasourceBackend
+
 
     readonly property string set_prefs: '/usr/share/plasma/plasmoids/' +
                                         'gr.ictpro.jsalatas.plasma.pstate/contents/code/' +
@@ -102,13 +109,13 @@ Item {
 
         function onBeginStageOne() {
             sensorsMgr.loadSensors()
-            if (main.hasNativeBackend) {
+            if (main.hasNativeBackend()) {
                 nativeBackendInit.init(firstInit.scriptReady)
             }
         }
 
         function onBeginStageTwo() {
-            if (main.hasNativeBackend) {
+            if (main.hasNativeBackend()) {
                 firstInit.initialized.connect(monitorDS.dataSourceReady)
                 main.monitorDS.init()
             }
@@ -117,7 +124,7 @@ Item {
 
     NativeBackend.Init {
         id: nativeBackendInit
-        hasNativeBackend: main.hasNativeBackend
+        hasNativeBackend: main.hasNativeBackend()
     }
 
     Component.onCompleted: {
@@ -127,8 +134,20 @@ Item {
                   (plasmoid.parent.objectName === 'taskItemContainer'))
     }
 
+    function hasMockBackend() {
+        return main.backendType === mockBackend
+    }
+
+    function hasNativeBackend() {
+        return main.backendType === nativeBackend
+    }
+
+    function hasDataSourceBackend() {
+        return main.backendType === datasourceBackend
+    }
+
     function initialized() {
-        plasmoid.configuration.hasNativeBackend = hasNativeBackend
+        plasmoid.configuration.hasNativeBackend = hasNativeBackend()
 
         main.updateSensor.connect(prefsManager.updateSensor)
         prefsManager.update.connect(updater.update)
@@ -415,7 +434,7 @@ Item {
                 main.monitorDS = monitorLoader.item
                 monitorDS.handleReadResult
                     .connect(prefsManager.handleReadResult)
-                if (hasNativeBackend) {
+                if (main.hasNativeBackend()) {
                     monitorDS.handleReadAvailResult
                         .connect(prefsManager.handleReadAvailResult)
                     monitorDS.handleSetValueResult
@@ -425,7 +444,7 @@ Item {
             }
         }
         Component.onCompleted: {
-            if (hasNativeBackend) {
+            if (main.hasNativeBackend()) {
                 var native_src = "./NativeBackend/Monitor.qml"
                 var native_props = {
                     interval: main.pollingInterval,
@@ -451,7 +470,7 @@ Item {
             onLoaded: {
                 print("updaterLoader: loaded " + updaterLoader.item.name)
                 main.updater = updaterLoader.item
-                if (!main.hasNativeBackend) {
+                if (main.hasDataSourceBackend()) {
                     main.updater.handleSetValueResult
                         .connect(prefsManager.handleSetValueResult)
 
@@ -460,7 +479,7 @@ Item {
             }
         }
         Component.onCompleted: {
-            if (hasNativeBackend) {
+            if (main.hasNativeBackend()) {
                 var native_src = "./NativeBackend/Updater.qml"
                 var native_props = {
                 }
@@ -485,7 +504,7 @@ Item {
             }
         }
         Component.onCompleted: {
-            if (hasNativeBackend) {
+            if (main.hasNativeBackend()) {
             } else {
                 var local_src = "./DataSourceBackend/AvailableValues.qml"
                 var local_props = { set_prefs: main.set_prefs, }

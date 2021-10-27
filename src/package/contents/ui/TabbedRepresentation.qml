@@ -139,7 +139,7 @@ GridLayout {
             return
         }
 
-        if (main.hasNativeBackend) {
+        if (main.hasNativeBackend()) {
             profileView.initialize()
         }
 
@@ -280,7 +280,8 @@ GridLayout {
 
                     Loader {
                         id: profileButton
-                        sourceComponent: main.hasNativeBackend ? toolButton : undefined
+                        sourceComponent: main.hasNativeBackend() ?
+                                            toolButton : undefined
                         onLoaded: {
                             item.symbolText = /* Black Star */ "\u2605"
                             item.itemId = "profilePage"
