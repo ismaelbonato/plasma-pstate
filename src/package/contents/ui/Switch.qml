@@ -10,6 +10,7 @@ import QtQuick.Controls 2.2
 RowLayout {
     property alias text: checkbox_title.text
     property alias checked: checkBox.checked
+    property bool isGrouped: false
     property bool acceptingChanges: false
 
     property var props
@@ -26,6 +27,7 @@ RowLayout {
 
     onPropsChanged: {
         text = props['text']
+        isGrouped = props['isGrouped'] ? props['isGrouped'] : false
 
         sensorModel = main.sensorsMgr.getSensor(props['sensor'])
         sensorModel.onValueChanged.connect(onValueChanged)
@@ -44,7 +46,8 @@ RowLayout {
     Label {
         Layout.alignment: Qt.AlignVCenter
         id: checkbox_title
-        font.pointSize: theme.smallestFont.pointSize
+        font.pointSize: isGrouped ? theme.smallestFont.pointSize :
+                                    theme.defaultFont.pointSize
         color: theme.textColor
         horizontalAlignment: Text.AlignRight
         Layout.minimumWidth: units.gridUnit * 4
