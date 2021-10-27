@@ -15,6 +15,7 @@ RowLayout {
     
     property bool acceptingChanges: false
     property alias text: combobox_title.text
+    property bool isGrouped: false
     property var props
     spacing: 0
 
@@ -57,6 +58,7 @@ RowLayout {
 
         combobox.model = filtered
         text = props['text']
+        isGrouped = props['isGrouped'] ? props['isGrouped'] : false
         sensorModel.onValueChanged.connect(onValueChanged)
 
         acceptingChanges = true
@@ -74,6 +76,8 @@ RowLayout {
     RowLayout {
         Label {
             id: combobox_title
+            font.pointSize: isGrouped ? theme.smallestFont.pointSize :
+                                        theme.defaultFont.pointSize
             color: theme.textColor
             horizontalAlignment: Text.AlignLeft
             // Layout.minimumWidth: units.gridUnit * 4
@@ -155,7 +159,8 @@ RowLayout {
                 Layout.alignment: Qt.AlignRight
 
                 text: combobox.displayText
-                font: combobox.font
+                font.pointSize: isGrouped ? theme.smallestFont.pointSize :
+                                            theme.defaultFont.pointSize
                 color: combobox.pressed ? theme.textColor : theme.highlightColor
                 elide: Text.ElideRight
                 verticalAlignment: Text.AlignVCenter
