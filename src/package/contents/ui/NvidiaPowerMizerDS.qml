@@ -90,6 +90,9 @@ Item {
     }
 
     Component.onCompleted: {
+        if (main.hasMockBackend()) {
+            return
+        }
         print("NvidiaPowerMizerDS: Checking for Nvidia GPU.")
         datasource.start()
     }

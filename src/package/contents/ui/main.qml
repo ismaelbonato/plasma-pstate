@@ -48,6 +48,7 @@ Item {
     readonly property var mockBackend: 1
     readonly property var nativeBackend: 2
 
+    // property int backendType: mockBackend
     property int backendType: plasmoid.nativeInterface.isReady !== undefined ?
                                 nativeBackend : datasourceBackend
 
@@ -111,6 +112,8 @@ Item {
             sensorsMgr.loadSensors()
             if (main.hasNativeBackend()) {
                 nativeBackendInit.init(firstInit.scriptReady)
+            } else if (main.hasMockBackend()) {
+                main.monitorDS.init()
             }
         }
 
@@ -439,6 +442,9 @@ Item {
                         .connect(prefsManager.handleReadAvailResult)
                     monitorDS.handleSetValueResult
                         .connect(prefsManager.handleSetValueResult)
+                } else if (main.hasMockBackend()) {
+                    monitorDS.handleReadAvailResult
+                        .connect(prefsManager.handleReadAvailResult)
                 }
                 firstInit.monitorReady()
             }
@@ -453,13 +459,16 @@ Item {
                     triggeredOnStart: true,
                 }
                 monitorLoader.setSource(native_src, native_props);
-            } else {
+            } else if (main.hasDataSourceBackend()) {
                 var local_src = "./DataSourceBackend/Monitor.qml"
                 var local_props = {
                     set_prefs: main.set_prefs,
                     pollingInterval: main.pollingInterval
                 }
                 monitorLoader.setSource(local_src, local_props);
+            } else if (main.hasMockBackend()) {
+                var mock_src = "./MockBackend/Monitor.qml"
+                monitorLoader.setSource(mock_src);
             }
         }
     }
@@ -470,7 +479,9 @@ Item {
             onLoaded: {
                 print("updaterLoader: loaded " + updaterLoader.item.name)
                 main.updater = updaterLoader.item
-                if (main.hasDataSourceBackend()) {
+                if (main.hasDataSourceBackend() ||
+                    main.hasMockBackend())
+                {
                     main.updater.handleSetValueResult
                         .connect(prefsManager.handleSetValueResult)
 
@@ -484,12 +495,15 @@ Item {
                 var native_props = {
                 }
                 updaterLoader.setSource(native_src, native_props);
-            } else {
+            } else if (hasDataSourceBackend()) {
                 var local_src = "./DataSourceBackend/Updater.qml"
                 var local_props = {
                     set_prefs: main.set_prefs,
                 }
                 updaterLoader.setSource(local_src, local_props);
+            } else if (main.hasMockBackend()) {
+                var mock_src = "./MockBackend/Updater.qml"
+                updaterLoader.setSource(mock_src);
             }
         }
     }
@@ -504,8 +518,7 @@ Item {
             }
         }
         Component.onCompleted: {
-            if (main.hasNativeBackend()) {
-            } else {
+            if (main.hasDataSourceBackend()) {
                 var local_src = "./DataSourceBackend/AvailableValues.qml"
                 var local_props = { set_prefs: main.set_prefs, }
                 availableValuesLoader.setSource(local_src, local_props);
