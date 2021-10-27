@@ -53,6 +53,8 @@ ColumnLayout {
     }
 
     function createItem(sensorItem) {
+        sensorItem['isGrouped'] = true
+
         switch (sensorItem['type']) {
             case 'slider': {
                 slider.createObject(group, {'props': sensorItem})
