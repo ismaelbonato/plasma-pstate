@@ -43,6 +43,10 @@ sensors_model=(
     "dell_fan_pwm"
     "cpufreq_scaling_min_freq"
     "cpufreq_scaling_max_freq"
+
+    "cpu_cores_possible"
+    "cpu_cores_online"
+    "cpu_smt"
 )
 
 

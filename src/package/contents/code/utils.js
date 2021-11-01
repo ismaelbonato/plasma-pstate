@@ -99,6 +99,9 @@ var sensors = {
 
     'cpufreq_scaling_min_freq': {'value': undefined, 'unit':' MHz', 'print': hz_to_mhz},
     'cpufreq_scaling_max_freq': {'value': undefined, 'unit':' MHz', 'print': hz_to_mhz},
+    'cpu_smt': {'value': undefined, 'unit':'', 'print': to_bool},
+    'cpu_cores_possible': {'value': undefined, 'unit':'', 'print': to_int},
+    'cpu_cores_online': {'value': undefined, 'unit':'', 'print': to_int},
 }
 
 var available_values = {
@@ -125,7 +128,11 @@ var model =  [
                 {'type': 'combobox', 'text': 'Max freq', 'sensor': 'cpufreq_scaling_max_freq',
                     'items' : undefined, 'available_values': 'cpu_scaling_available_frequencies'
                 },
-                {'type': 'switch', 'text': 'Turbo', 'sensor': 'cpu_turbo'}
+                {'type': 'switch', 'text': 'Turbo', 'sensor': 'cpu_turbo'},
+            ]},
+            {'type': 'group', 'text': 'CPU Hot Plug', 'items' :[
+                {'type': 'slider', 'text': 'Cores online', 'min': 1, 'max': 'cpu_cores_possible', 'sensor': 'cpu_cores_online'},
+                {'type': 'switch', 'text': 'SMT', 'sensor': 'cpu_smt'}
             ]},
             {'type': 'group', 'text': 'GPU Frequencies', 'visible': 'showIntelGPU', 'items' :[
                 {'type': 'slider', 'text': 'Min freq', 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_min_freq'},
