@@ -28,6 +28,12 @@ PlasmaCore.DataSource {
         return cmd
     }
 
+    function activeSensorsChanged() {
+        var sensors = main.sensorsMgr.activeSensors
+        sensors = Ds.filterReadableSensors(sensors)
+        commandSource = getCommand(sensors)
+    }
+
     onNewData: {
         if (data['exit code'] > 0) {
             print('monitorDS error: ' + data.stderr)

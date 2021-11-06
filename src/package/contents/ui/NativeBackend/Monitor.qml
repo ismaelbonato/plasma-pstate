@@ -39,10 +39,10 @@ Item {
         }
     }
 
-    function dataSourceReady() {
-        var detectedSensors = main.sensorsMgr.detectedSensors
-        var readable = Ds.filterReadableSensors(detectedSensors)
-        args = ['-read-some'].concat(readable)
+    function activeSensorsChanged() {
+        var sensors = main.sensorsMgr.activeSensors
+        sensors = Ds.filterReadableSensors(sensors)
+        args = ['-read-some'].concat(sensors)
     }
 
     Connections {

@@ -66,6 +66,9 @@ Item {
         start()
     }
 
+    function activeSensorsChanged() {
+    }
+
     Timer {
         id: timer
         interval: 2000

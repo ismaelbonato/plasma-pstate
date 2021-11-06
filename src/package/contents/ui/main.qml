@@ -119,7 +119,6 @@ Item {
 
         function onBeginStageTwo() {
             if (main.hasNativeBackend()) {
-                firstInit.initialized.connect(monitorDS.dataSourceReady)
                 main.monitorDS.init()
             }
         }

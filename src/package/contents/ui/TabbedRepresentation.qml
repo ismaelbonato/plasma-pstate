@@ -226,6 +226,7 @@ GridLayout {
             return
         }
 
+        main.sensorsMgr.clearActiveSensors()
 
         var props = {'props': headerItem, showIcon: false};
         if (currentItemId && currentItemId === itemId) {
@@ -238,6 +239,9 @@ GridLayout {
         stackView.push(scrollComponent, props, StackView.PushTransition)
         tabbedRepresentation.currentItemId = itemId
         set_indicator_position(currentItemId)
+
+        main.monitorDS.activeSensorsChanged()
+        main.monitorDS.restart()
     }
 
     Component.onCompleted: {
