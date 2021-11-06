@@ -256,17 +256,6 @@ function sensor_has_value(item) {
     var sensorNames = main.sensorsMgr.getKeys()
 
     if (item.type === 'header') {
-        if (item.sensors) {
-            for (var i = item.sensors.length - 1; i >= 0; i--) {
-                var sensor = item.sensors[i]
-                if (sensorNames.includes(sensor) && (main.sensorsMgr.hasKey(sensor) &&
-                    !!main.sensorsMgr.getSensor(sensor).value))
-                {
-                    return true
-                }
-            }
-        }
-
         for (var i = item.items.length - 1; i >= 0; i--) {
             if (sensor_has_value(item.items[i])) {
                 return true
