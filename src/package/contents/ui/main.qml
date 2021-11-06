@@ -61,11 +61,6 @@ Item {
                                   (plasmoid.configuration.pollingInterval * 1000) : 2000
     property int slowPollingInterval: (plasmoid.configuration.slowPollingInterval * 1000)
 
-    function sensor_short_name(long_name) {
-        var parts = long_name.split('/');
-        return parts[parts.length - 1];
-    }
-
     Plasmoid.compactRepresentation: CompactRepresentation { }
     // Plasmoid.fullRepresentation: FullRepresentation { }
 
@@ -282,7 +277,7 @@ Item {
         }
 
         onNewData: {
-            var source_short_name = sensor_short_name(sourceName);
+            var source_short_name = Utils.sensor_short_name(sourceName);
 
             if(source_short_name.startsWith('fan')) {
                 var sensorModel = sensorsMgr.getSensor('fan_speeds')

@@ -335,6 +335,11 @@ function get_sensors_text(sensors) {
     return res || 'N/A';
 }
 
+function sensor_short_name(long_name) {
+    var parts = long_name.split('/');
+    return parts[parts.length - 1];
+}
+
 function deepCopy(p, c) {
     c = c || {};
     for (var i in p) {
