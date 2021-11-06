@@ -11,32 +11,31 @@ PlasmaCore.DataSource {
 
     property string name: "LocalMonitor"
 
-    property bool isReady: false
-    property string commandSource: (plasmoid.configuration.useSudoForReading ? 'pkexec ' : '') +
-                                   set_prefs +
-                                   (!isReady ? ' -read-all' :
-                                    ' -read-some ' + main.sensorsMgr.detectedSensors.join(" "))
+    property string commandSource: getCommand()
 
     /* required */ property var set_prefs
 
     signal handleReadResult(var args, string stdout)
 
+    function getCommand(sensors) {
+        var cmd = plasmoid.configuration.useSudoForReading ? 'pkexec ' : ''
+        cmd += set_prefs
+        if (!sensors || sensors.length === 0) {
+            cmd += ' -read-all'
+        } else {
+            cmd += ' -read-some ' + sensors.join(" ")
+        }
+        return cmd
+    }
 
     onNewData: {
         if (data['exit code'] > 0) {
             print('monitorDS error: ' + data.stderr)
         } else {
-            var prevIsReady = isReady;
             var args = sourceName.split(' ')
             args = args.slice(args.indexOf(set_prefs) + 1)
 
             handleReadResult(args, data.stdout)
-
-            // Switch command from from -read-all to -read-some
-            if (isReady != prevIsReady) {
-                disconnectSource(sourceName);
-                connectSource(commandSource)
-            }
         }
     }
 
