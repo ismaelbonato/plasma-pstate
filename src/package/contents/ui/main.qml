@@ -608,23 +608,27 @@ Item {
 
         var toolTipSubText ='';
         var txt = '';
+        var font = "Plasma pstate Manager"
 
         toolTipSubText += '<font size="4"><table>'
 
         toolTipSubText += '<tr>'
         toolTipSubText += '<td style="text-align: right;">'
-        toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">d</font></span>'
+        toolTipSubText += '<span style="font-family: ' + font + ';">'
+        toolTipSubText += '<font size="5">d</font></span>'
         toolTipSubText += '</td>'
         toolTipSubText += '<td style="text-align: left;">'
         toolTipSubText += '<span>&nbsp;&nbsp;' + loadText +'</span>'
         toolTipSubText += '</td>'
         toolTipSubText += '</tr>'
 
-        txt = Utils.get_sensors_text(['battery_percentage', 'battery_remaining_time']);
+        txt = Utils.get_sensors_text(
+            ['battery_percentage', 'battery_remaining_time']);
         if(txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">h</font></span>'
+            toolTipSubText += '<span style="font-family: ' + font + ';">'
+            toolTipSubText += '<font size="5">h</font></span>'
             toolTipSubText += '</td>'
             toolTipSubText += '<td style="text-align: left;">'
             toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
@@ -636,7 +640,8 @@ Item {
         if (txt != 'N/A') {
             toolTipSubText += '<tr>'
             toolTipSubText += '<td style="text-align: center;">'
-            toolTipSubText += '<span style="font-family: Plasma pstate Manager;"><font size="5">b</font></span>'
+            toolTipSubText += '<span style="font-family: ' + font + ';">'
+            toolTipSubText += '<font size="5">b</font></span>'
             toolTipSubText += '</td>'
             toolTipSubText += '<td style="text-align: left;">'
             toolTipSubText += '<span>&nbsp;&nbsp;'+ txt +'</span>'
