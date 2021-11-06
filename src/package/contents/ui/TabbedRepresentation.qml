@@ -215,21 +215,21 @@ GridLayout {
             return
         }
 
-        var item = undefined
+        var headerItem = undefined
         model.forEach(m => {
-            if (!item && m['id'] === itemId) {
-                item = m
+            if (!headerItem && m['id'] === itemId) {
+                headerItem = m
             }
         })
-        if (!item) {
-            print("error: Couldn't find item with id=" + itemId)
+        if (!headerItem) {
+            print("error: Couldn't find header with id=" + itemId)
             return
         }
 
 
-        var props = {'props': item, showIcon: false};
+        var props = {'props': headerItem, showIcon: false};
         if (currentItemId && currentItemId === itemId) {
-            // clicking on the same item reloads it
+            // clicking on the same header reloads it
             stackView.pop(StackView.Immediate)
             stackView.push(scrollComponent, props, StackView.Immediate)
         }
