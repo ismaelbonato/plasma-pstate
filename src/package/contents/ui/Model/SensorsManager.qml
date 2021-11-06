@@ -17,6 +17,8 @@ QtObject {
 
     property var detectedSensors: []
 
+    property var activeSensors: []
+
     property var sensorComponent
 
     function loadSensors() {
@@ -124,5 +126,16 @@ QtObject {
             }
             detectedSensors.push(keys[i])
         }
+    }
+
+    function addActiveSensor(sensor) {
+        if (activeSensors.includes(sensor)) {
+            return
+        }
+        activeSensors.push(sensor)
+    }
+
+    function clearActiveSensors() {
+        activeSensors = []
     }
 }
