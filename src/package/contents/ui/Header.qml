@@ -109,6 +109,10 @@ RowLayout {
             } else {
                 createItem(sensorItem)
             }
+
+            if (sensorModel && sensorModel.sensor) {
+                main.sensorsMgr.addActiveSensor(sensorModel.sensor)
+            }
         }
     }
 
@@ -126,6 +130,10 @@ RowLayout {
             prevLabel = label
 
             sensorModel.emitValueChanged()
+
+            if (sensorModel && !Utils.is_sysmon_sensor(sensorModel)) {
+                main.sensorsMgr.addActiveSensor(sensorModel.sensor)
+            }
         }
     }
 

@@ -81,6 +81,10 @@ ColumnLayout {
             }
 
             createItem(sensorItem)
+
+            if (sensorItem.sensor) {
+                main.sensorsMgr.addActiveSensor(sensorItem.sensor)
+            }
         }
     }
 
