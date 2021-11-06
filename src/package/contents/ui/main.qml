@@ -91,6 +91,9 @@ Item {
 
     property var sensorsMgr
 
+    property var activeSensorsBackup: []
+    property var activeTraySensors: ['gpu_cur_freq']
+
 
     Component {
         id: sensorsMgrComponent
@@ -182,6 +185,8 @@ Item {
         if (main.tabbedRep.show_item) {
             main.tabbedRep.show_item("processorSettings")
         }
+
+        main.activeSensorsBackup = sensorsMgr.activeSensors
     }
 
     function enterEditMode() {
@@ -368,8 +373,15 @@ Item {
 
             if (plasmoid.expanded) {
                 setMonitorInterval(pollingInterval)
+
+                sensorsMgr.activeSensors = main.activeSensorsBackup
+                monitorDS.activeSensorsChanged()
             } else {
                 setMonitorInterval(slowPollingInterval)
+
+                main.activeSensorsBackup = sensorsMgr.activeSensors
+                sensorsMgr.activeSensors = main.activeTraySensors
+                monitorDS.activeSensorsChanged()
             }
 
             if (shouldMonitor()) {
