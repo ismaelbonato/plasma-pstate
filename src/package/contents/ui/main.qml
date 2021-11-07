@@ -182,6 +182,7 @@ Item {
         }
 
         main.activeSensorsBackup = sensorsMgr.activeSensors
+        main.expandedChanged()
     }
 
     function enterEditMode() {
@@ -357,31 +358,35 @@ Item {
         }
     }
 
+    function expandedChanged() {
+        if (!main.isInitialized) {
+            return
+        }
+
+        stopMonitors()
+
+        if (plasmoid.expanded) {
+            setMonitorInterval(pollingInterval)
+
+            sensorsMgr.activeSensors = main.activeSensorsBackup
+            monitorDS.activeSensorsChanged()
+        } else {
+            setMonitorInterval(slowPollingInterval)
+
+            main.activeSensorsBackup = sensorsMgr.activeSensors
+            sensorsMgr.activeSensors = main.activeTraySensors
+            monitorDS.activeSensorsChanged()
+        }
+
+        if (shouldMonitor()) {
+            startMonitors()
+        }
+    }
+
     Connections {
         target: plasmoid
         function onExpandedChanged() {
-            if (!main.isInitialized) {
-                return
-            }
-
-            stopMonitors()
-
-            if (plasmoid.expanded) {
-                setMonitorInterval(pollingInterval)
-
-                sensorsMgr.activeSensors = main.activeSensorsBackup
-                monitorDS.activeSensorsChanged()
-            } else {
-                setMonitorInterval(slowPollingInterval)
-
-                main.activeSensorsBackup = sensorsMgr.activeSensors
-                sensorsMgr.activeSensors = main.activeTraySensors
-                monitorDS.activeSensorsChanged()
-            }
-
-            if (shouldMonitor()) {
-                startMonitors()
-            }
+            main.expandedChanged()
         }
     }
 
