@@ -203,37 +203,39 @@ GridLayout {
         editMode = false
     }
 
+    function findHeaderItem(id) {
+        var headerItem = undefined
+        model.forEach(m => {
+            if (!headerItem && m['id'] === id) {
+                headerItem = m
+            }
+        })
+        return headerItem
+    }
+
     function show_item(itemId) {
+        main.sensorsMgr.clearActiveSensors()
+
         if (itemId === "profilePage") {
             if (currentItemId !== itemId) {
                 stackView.clear(StackView.PopTransition)
                 stackView.push(profileView, StackView.PushTransition)
                 currentItemId = itemId
-            }
-            set_indicator_position(currentItemId)
 
+                set_indicator_position(currentItemId)
+
+                main.monitorDS.stop()
+            }
             return
         }
 
-        var headerItem = undefined
-        model.forEach(m => {
-            if (!headerItem && m['id'] === itemId) {
-                headerItem = m
-            }
-        })
+        var headerItem = findHeaderItem(itemId)
         if (!headerItem) {
             print("error: Couldn't find header with id=" + itemId)
             return
         }
 
-        main.sensorsMgr.clearActiveSensors()
-
         var props = {'props': headerItem, showIcon: false};
-        if (currentItemId && currentItemId === itemId) {
-            // clicking on the same header reloads it
-            stackView.pop(StackView.Immediate)
-            stackView.push(scrollComponent, props, StackView.Immediate)
-        }
 
         stackView.clear(StackView.PopTransition)
         stackView.push(scrollComponent, props, StackView.PushTransition)
