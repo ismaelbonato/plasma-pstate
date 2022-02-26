@@ -139,7 +139,7 @@ var model =  [
                 {'type': 'slider', 'text': 'Max freq', 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_max_freq'},
                 {'type': 'slider', 'text': 'Boost freq', 'min': 'gpu_min_limit', 'max': 'gpu_max_limit', 'sensor': 'gpu_boost_freq'},
             ]},
-            {'type': 'combobox', 'text': 'CPU Governor', 'sensor': 'cpu_governor', 'items' :[
+            {'type': 'radio', 'text': 'CPU Governor', 'sensor': 'cpu_governor', 'items' :[
                 {'symbol': 'a', 'text': 'Performance', 'sensor_value': 'performance'},
                 {'symbol': 'f', 'text': 'Powersave', 'sensor_value': 'powersave'},
                 {'symbol': 'l', 'text': "Ondemand", 'sensor_value': 'ondemand'},
@@ -172,7 +172,7 @@ var model =  [
         'vendors': ['dell'],
         'sensors': ['package_temp', 'fan_speeds'],
         'items': [
-            {'type': 'combobox', 'text': 'Thermal Mode', 'sensor': 'thermal_mode', 'items' :[
+            {'type': 'radio', 'text': 'Thermal Mode', 'sensor': 'thermal_mode', 'items' :[
                  {'symbol': 'e', 'text': 'Performance', 'sensor_value': 'performance'},
                  {'symbol': 'j', 'text': 'Balanced', 'sensor_value': 'balanced'},
                  {'symbol': 'g', 'text': 'Cool Bottom', 'sensor_value': 'cool-bottom'},
